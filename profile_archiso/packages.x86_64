@@ -1,52 +1,52 @@
-# Base, Shell & Entorno Gráfico
+# ==========================================
+# HackArch - Live ISO Packages
+# ==========================================
+
+# --- Base & Kernel ---
 base
 linux
 linux-firmware
+sudo
+openssh
+
+# --- Entorno Gráfico & Display ---
+xorg-server
+xorg-xinit
+bspwm
+sxhkd
+picom
+polybar
+rofi
+feh
+kitty
+ttf-hack-nerd
+wmname
+wmctrl
+
+# --- Shell & Terminal Moderno ---
 zsh
 zsh-completions
 zsh-autosuggestions
 zsh-syntax-highlighting
 starship
-bspwm
-sxhkd
-picom
-polybar
-kitty
-ttf-hack-nerd
-feh
-rofi
-xorg-server
-xorg-xinit
-wmname
-
-# Aplicaciones GUI (Lanzadas en sxhkdrc)
-firefox
-flameshot
-
-# Audio & Controles (Para comandos pactl de sxhkdrc)
-libpulse
-
-# Utilidades Modernas CLI & Sistema
 bat
 lsd
 fzf
 xclip
-wmctrl
+
+# --- Navegación, GUI & Audio ---
+firefox
+flameshot
+libpulse
+
+# --- Diagnóstico, Disco & Red Base ---
 curl
 git
-sudo
-openssh
 bind
 dhclient
 dhcpcd
 iproute2
 net-tools
-
-# Soporte Red, Synology/SMB & Montajes
-cifs-utils
-nfs-utils
-
-# Diagnóstico, Salud y Recuperación de Discos
 smartmontools
 hdparm
 sdparm
@@ -57,8 +57,13 @@ parted
 e2fsprogs
 dosfstools
 ntfs-3g
+cifs-utils
+nfs-utils
 
-# Suite Auditoría (Active Directory, Web & Explotación)
+# --- Deepweb / Anonimato ---
+i2pd
+
+# --- Auditoría: Active Directory & Redes ---
 python-impacket
 netexec
 bloodyAD
@@ -72,19 +77,23 @@ evil-winrm
 responder
 enum4linux-ng
 kerbrute
+
+# --- Auditoría: Pivotaje & Escaneo ---
 chisel
 ligolo-ng
 nmap
 rustscan
+naabu
+
+# --- Auditoría: Web & Fuzzing ---
 ffuf
 gobuster
-john
-hashcat
-hydra
 burpsuite
-zaproxy
 nuclei
 subfinder
 httpx-pd
-naabu
+
+# --- Auditoría: Criptografía & Repos ---
+john
+hashcat
 blackarch-keyring
