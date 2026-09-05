@@ -1,29 +1,43 @@
-# Base & Entorno Gráfico
+# Base, Shell & Entorno Gráfico
 base
 linux
 linux-firmware
+zsh
+zsh-completions
+zsh-autosuggestions
+zsh-syntax-highlighting
+starship
 bspwm
 sxhkd
-kitty
-starship
-ttf-hack-nerd
 picom
+polybar
+kitty
+ttf-hack-nerd
 feh
 rofi
 xorg-server
 xorg-xinit
+wmname
 
-# Red, Sistema & Utilidades
-nfs-utils
-openssh
-bind
+# Utilidades Modernas CLI & Sistema
+bat
+lsd
+fzf
+xclip
+wmctrl
 curl
 git
 sudo
+openssh
+bind
 dhclient
 dhcpcd
 iproute2
 net-tools
+
+# Soporte Red, Synology/SMB & Montajes
+cifs-utils
+nfs-utils
 
 # Diagnóstico, Salud y Recuperación de Discos
 smartmontools

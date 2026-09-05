@@ -56,13 +56,13 @@ bindkey "^[[3~" delete-char
 function settarget(){
     ip_address=$1
     machine_name=$2
-    mkdir -p ~/.config/polybar/hack/scripts
-    echo "$ip_address $machine_name" > ~/.config/polybar/hack/scripts/target
+    mkdir -p $HOME/.config/polybar/hack/scripts
+    echo "$ip_address $machine_name" > $HOME/.config/polybar/hack/scripts/target
 }
 
 function cleartarget(){
-    mkdir -p ~/.config/polybar/hack/scripts
-    echo '' > ~/.config/polybar/hack/scripts/target
+    mkdir -p $HOME/.config/polybar/hack/scripts
+    echo '' > $HOME/.config/polybar/hack/scripts/target
 }
 
 function mkt(){
