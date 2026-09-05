@@ -19,6 +19,13 @@ xorg-server
 xorg-xinit
 wmname
 
+# Aplicaciones GUI (Lanzadas en sxhkdrc)
+firefox
+flameshot
+
+# Audio & Controles (Para comandos pactl de sxhkdrc)
+libpulse
+
 # Utilidades Modernas CLI & Sistema
 bat
 lsd
