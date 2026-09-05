@@ -1,143 +1,148 @@
 #
-# wm independent hotkeys
+# WM Independent Hotkeys
 #
 
-# terminal emulator
+# Terminal Emulator
 super + Return
 	kitty
 
-# program launcher
-super + @space
-  rofi -no-config -no-lazy-grab -show drun -modi drun -theme ~/.config/polybar/hack/scripts/rofi/launcher.rasi
+# Program Launcher (Rofi)
+super + space
+	rofi -no-config -no-lazy-grab -show drun -modi drun -theme ~/.config/polybar/hack/scripts/rofi/launcher.rasi
 
-# make sxhkd reload its configuration files:
+# Make sxhkd reload its configuration files
 super + shift + Escape
 	pkill -USR1 -x sxhkd
 
+# Application Shortcuts
+super + shift + f
+	firefox
+
+super + shift + s
+	flameshot gui
+
+super + Escape
+	sh ~/.config/polybar/hack/scripts/powermenu.sh
+
 #
-# bspwm hotkeys
+# BSPWM Hotkeys
 #
 
-# quit/restart bspwm
+# Quit / Restart BSPWM
 super + shift + {q,r}
 	bspc {quit,wm -r}
 
-# close and kill
+# Close / Kill Node
 super + {_,shift + }w
 	bspc node -{c,k}
 
-# alternate between the tiled and monocle layout
+# Alternate between tiled and monocle layout
 super + m
 	bspc desktop -l next
 
-# send the newest marked node to the newest preselected node
+# Send the newest marked node to the newest preselected node
 super + y
 	bspc node newest.marked.local -n newest.!automatic.local
 
-# swap the current node and the biggest window
+# Swap current node and biggest window
 super + g
 	bspc node -s biggest.window
 
 #
-# state/flags
+# State / Flags
 #
 
-# set the window state
+# Set window state
 super + {t,shift + t,s,f}
 	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
 
-# set the node flags
+# Set node flags
 super + ctrl + {m,x,y,z}
 	bspc node -g {marked,locked,sticky,private}
 
 #
-# focus/swap
+# Focus / Swap
 #
 
-# focus the node in the given direction
+# Focus / Swap node in direction
 super + {_,shift + }{Left,Down,Up,Right}
 	bspc node -{f,s} {west,south,north,east}
 
-# focus the node for the given path jump
+# Focus path jump
 super + {p,b,comma,period}
 	bspc node -f @{parent,brother,first,second}
 
-# focus the next/previous window in the current desktop
+# Focus next/previous window in current desktop
 super + {_,shift + }c
 	bspc node -f {next,prev}.local.!hidden.window
 
-# focus the next/previous desktop in the current monitor
+# Focus next/previous desktop
 super + bracket{left,right}
 	bspc desktop -f {prev,next}.local
 
-# focus the last node/desktop
+# Focus last node/desktop
 super + {grave,Tab}
 	bspc {node,desktop} -f last
 
-# focus the older or newer node in the focus history
+# Focus older/newer node in history
 super + {o,i}
 	bspc wm -h off; \
 	bspc node {older,newer} -f; \
 	bspc wm -h on
 
-# focus or send to the given desktop
+# Focus or send to desktop
 super + {_,shift + }{1-9,0}
 	bspc {desktop -f,node -d} '^{1-9,10}'
 
 #
-# preselect
+# Preselect
 #
 
-# preselect the direction
+# Preselect direction
 super + ctrl + {Left,Down,Up,Right}
 	bspc node -p {west,south,north,east}
 
-# preselect the ratio
+# Preselect ratio
 super + ctrl + {1-9}
 	bspc node -o 0.{1-9}
 
-# cancel the preselection for the focused node
+# Cancel preselection for focused node
 super + ctrl + space
 	bspc node -p cancel
 
-# cancel the preselection for the focused desktop
+# Cancel preselection for focused desktop
 super + ctrl + shift + space
 	bspc query -N -d | xargs -I id -n 1 bspc node id -p cancel
 
 #
-# move/resize
+# Move / Resize
 #
 
-# expand a window by moving one of its side outward
+# Expand window outwards
 super + alt + {Left,Down,Up,Right}
 	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
 
-# contract a window by moving one of its side inward
+# Contract window inwards
 super + alt + shift + {Left,Down,Up,Right}
 	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
 
-# move a floating window
-super + {Left,Down,Up,Right}
+# Move floating window
+super + ctrl + alt + {Left,Down,Up,Right}
 	bspc node -v {-20 0,0 20,0 -20,20 0}
 
-# Open Firefox
-super + shift + f
-	/usr/bin/firefox
+#
+# Media Keys (Pipewire / Pulseaudio)
+#
 
-super + shift + s 
-  /usr/bin/flameshot gui
-
-super + Escape
-  sh ~/.config/polybar/hack/scripts/powermenu.sh
-
-
-# Raise volume with 100% limit
+# Raise Volume (Limit 100%)
 XF86AudioRaiseVolume
-    [ $(pactl get-sink-volume @DEFAULT_SINK@ | grep -Po '\d+(?=%)' | head -n 1) -lt 100 ] && pactl set-sink-volume @DEFAULT_SINK@ +5%
+	VOL=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -Po '\d+(?=%)' | head -n 1); \
+	[ "$VOL" -lt 100 ] && pactl set-sink-volume @DEFAULT_SINK@ +5%
 
-# Lower volume (no limit needed here, it stops at 0% automatically)
+# Lower Volume
 XF86AudioLowerVolume
-    pactl set-sink-volume @DEFAULT_SINK@ -5%
-# Mute/Unmute
+	pactl set-sink-volume @DEFAULT_SINK@ -5%
+
+# Mute / Unmute
 XF86AudioMute
-    pactl set-sink-mute @DEFAULT_SINK@ toggle
+	pactl set-sink-mute @DEFAULT_SINK@ toggle
