@@ -1,0 +1,12 @@
+{
+  "policies": {
+    "Certificates": {
+      "Install": [
+        "/etc/ca-certificates/trust-source/anchors/caido-ca.crt"
+      ]
+    },
+    "DisableAppUpdate": true,
+    "OverrideFirstRunPage": "",
+    "OverridePostUpdatePage": ""
+  }
+}
