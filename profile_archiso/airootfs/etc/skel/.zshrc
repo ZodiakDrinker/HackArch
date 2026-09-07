@@ -40,8 +40,8 @@ alias l='lsd --group-dirs=first'
 alias lla='lsd -lha --group-dirs=first'
 alias ls='lsd --group-dirs=first'
 
-alias nfs-on='sudo mount /mnt/tools && echo "Synology montado en /mnt/tools"'
-alias nfs-off='sudo umount /mnt/tools && echo "Synology desmontado"'
+alias nfs-on='sudo mount /mnt && echo "Synology montado en /mnt"'
+alias nfs-off='sudo umount /mnt && echo "Synology desmontado"'
 alias renew-ip='sudo dhclient -r && sudo dhclient'
 
 # Auto-configuración de hardware por IP
