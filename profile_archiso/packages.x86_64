@@ -34,6 +34,15 @@ lsd
 fzf
 xclip
 
+# --- Entorno Neovim ---
+neovim
+git
+ripgrep
+fd
+make
+gcc
+unzip
+
 # --- Navegación, GUI & Audio ---
 firefox
 flameshot
