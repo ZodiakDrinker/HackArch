@@ -10,6 +10,9 @@ sudo
 openssh
 syslinux
 systemd
+memtest86+-efi
+memtest86+
+edk2-shell
 
 # --- Pila base de red y Wi-Fi ---
 networkmanager
