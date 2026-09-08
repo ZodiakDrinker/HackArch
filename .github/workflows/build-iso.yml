@@ -33,8 +33,10 @@ jobs:
           CAIDO_DIR="profile_archiso/airootfs/usr/local/bin"
           mkdir -p "$CAIDO_DIR"
 
-          # Descargar el binario ejecutable de Caido CLI
-          curl -sL "https://caido.download/download/latest/caido-cli-linux-x86_64.tar.gz" | tar -xz -C "$CAIDO_DIR"
+          DOWNLOAD_URL=$(curl -s https://api.github.com/repos/caido/caido/releases/latest | grep "browser_download_url" | grep "linux-x86_64.tar.gz" | cut -d '"' -f 4)
+
+          curl -sL "$DOWNLOAD_URL" | tar -xz -C "$CAIDO_DIR"
+          
           chmod +x "$CAIDO_DIR/caido-cli" || chmod +x "$CAIDO_DIR/caido"
 
       - name: Enable NetworkManager Service
