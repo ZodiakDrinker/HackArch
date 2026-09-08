@@ -45,7 +45,15 @@ jobs:
           mkdir -p "$WANTS_DIR"
           ln -sf /usr/lib/systemd/system/NetworkManager.service "$WANTS_DIR/NetworkManager.service"
 
-             
+      - name: Free Disk Space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
+          df -h
+
       - name: Build Archiso in Arch Linux Container
         run: |
           mkdir -p out/
