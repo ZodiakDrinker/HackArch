@@ -54,14 +54,20 @@ jobs:
             -w /workspace \
             archlinux:latest \
             /bin/bash -c "
-              pacman -Syu --noconfirm archiso neovim git syslinux &&
+              pacman-key --init &&
+              pacman-key --populate archlinux &&
+              pacman -Syu --noconfirm archiso neovim git syslinux curl &&
               
+              curl -O https://blackarch.org/stripe.sh &&
+              chmod +x stripe.sh &&
+              ./stripe.sh || true &&
+
               mkdir -p /workspace/profile_archiso/efiboot/loader/entries
               cp -rn /usr/share/archiso/configs/releng/syslinux /workspace/profile_archiso/ || true
               cp -rn /usr/share/archiso/configs/releng/efiboot /workspace/profile_archiso/ || true
-              
+
               HOME=/workspace/profile_archiso/airootfs/etc/skel nvim --headless '+Lazy! sync' +qa || true &&
-              
+
               mkarchiso -v -w /tmp/archiso-tmp -o /workspace/out /workspace/profile_archiso
             "
 
