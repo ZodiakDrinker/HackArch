@@ -1,0 +1,113 @@
+# ==========================================
+# HackArch - Live ISO Packages
+# ==========================================
+
+# --- Base & Kernel ---
+base
+linux
+linux-firmware
+sudo
+openssh
+
+# --- Pila base de red y Wi-Fi ---
+networkmanager
+wpa_supplicant
+iw
+
+# --- Entorno Gráfico & Display ---
+xorg-server
+xorg-xinit
+bspwm
+sxhkd
+picom
+polybar
+rofi
+feh
+kitty
+ttf-hack-nerd
+wmname
+wmctrl
+
+# --- Shell & Terminal Moderno ---
+zsh
+zsh-completions
+zsh-autosuggestions
+zsh-syntax-highlighting
+starship
+bat
+lsd
+fzf
+xclip
+
+# --- Entorno Neovim ---
+neovim
+git
+ripgrep
+fd
+make
+gcc
+unzip
+
+# --- Navegación, GUI & Audio ---
+firefox
+flameshot
+libpulse
+
+# --- Diagnóstico, Disco & Red Base ---
+curl
+git
+bind
+dhclient
+dhcpcd
+iproute2
+net-tools
+smartmontools
+hdparm
+sdparm
+ddrescue
+testdisk
+gparted
+parted
+e2fsprogs
+dosfstools
+ntfs-3g
+cifs-utils
+nfs-utils
+
+# --- Deepweb / Anonimato ---
+i2pd
+
+# --- Auditoría: Active Directory & Redes ---
+python-impacket
+netexec
+bloodyAD
+certipy-ad
+coercer
+ldapdomaindump
+bloodhound
+bloodhound-python
+lsassy
+evil-winrm
+responder
+enum4linux-ng
+kerbrute
+
+# --- Auditoría: Pivotaje & Escaneo ---
+chisel
+ligolo-ng
+nmap
+rustscan
+naabu
+
+# --- Auditoría: Web & Fuzzing ---
+ffuf
+gobuster
+burpsuite
+nuclei
+subfinder
+httpx-pd
+
+# --- Auditoría: Criptografía & Repos ---
+john
+hashcat
+blackarch-keyring
