@@ -45,6 +45,7 @@ jobs:
           mkdir -p "$WANTS_DIR"
           ln -sf /usr/lib/systemd/system/NetworkManager.service "$WANTS_DIR/NetworkManager.service"
 
+             
       - name: Build Archiso in Arch Linux Container
         run: |
           mkdir -p out/
@@ -53,8 +54,14 @@ jobs:
             -w /workspace \
             archlinux:latest \
             /bin/bash -c "
-              pacman -Syu --noconfirm archiso neovim git &&
+              pacman -Syu --noconfirm archiso neovim git syslinux &&
+              
+              mkdir -p /workspace/profile_archiso/efiboot/loader/entries
+              cp -rn /usr/share/archiso/configs/releng/syslinux /workspace/profile_archiso/ || true
+              cp -rn /usr/share/archiso/configs/releng/efiboot /workspace/profile_archiso/ || true
+              
               HOME=/workspace/profile_archiso/airootfs/etc/skel nvim --headless '+Lazy! sync' +qa || true &&
+              
               mkarchiso -v -w /tmp/archiso-tmp -o /workspace/out /workspace/profile_archiso
             "
 
