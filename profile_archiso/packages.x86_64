@@ -8,6 +8,8 @@ linux
 linux-firmware
 sudo
 openssh
+syslinux
+systemd
 
 # --- Pila base de red y Wi-Fi ---
 networkmanager
