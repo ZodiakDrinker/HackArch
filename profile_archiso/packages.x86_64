@@ -83,15 +83,15 @@ nfs-utils
 i2pd
 
 # --- Auditoría: Active Directory & Redes ---
-python-impacket
+impacket
 netexec
-bloodyAD
-certipy-ad
+bloodyad
+certipy
 coercer
-ldapdomaindump
+python-ldapdomaindump
 bloodhound
 bloodhound-python
-lsassy
+python-lsassy
 evil-winrm
 responder
 enum4linux-ng
@@ -110,7 +110,7 @@ gobuster
 burpsuite
 nuclei
 subfinder
-httpx-pd
+httpx
 
 # --- Auditoría: Criptografía & Repos ---
 john
