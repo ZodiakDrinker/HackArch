@@ -1,0 +1,2 @@
+[core]
+    sshCommand = ssh -i ~/mnt/github -o IdentitiesOnly=yes
