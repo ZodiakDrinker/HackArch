@@ -9,6 +9,11 @@ linux-firmware
 sudo
 openssh
 
+# --- Pila base de red y Wi-Fi ---
+networkmanager
+wpa_supplicant
+iw
+
 # --- Entorno Gráfico & Display ---
 xorg-server
 xorg-xinit
