@@ -70,7 +70,7 @@ jobs:
               cp -rn /usr/share/archiso/configs/releng/syslinux /workspace/profile_archiso/ || true
               cp -rn /usr/share/archiso/configs/releng/efiboot /workspace/profile_archiso/ || true
 
-              HOME=/workspace/profile_archiso/airootfs/etc/skel nvim --headless "+Lazy! sync" +qa || true
+              HOME=/workspace/profile_archiso/airootfs/etc/skel nvim --headless "+Lazy! sync" +qa || true &&
 
               mkdir -p /workspace/profile_archiso/airootfs/etc
               echo 'HOOKS=(base udev archiso archiso_loop_mnt block filesystems keyboard)' > /workspace/profile_archiso/airootfs/etc/mkinitcpio.conf
