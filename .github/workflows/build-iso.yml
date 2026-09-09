@@ -66,17 +66,15 @@ jobs:
               pacman-key --populate archlinux &&
               pacman -Syu --noconfirm archiso neovim git syslinux curl &&
 
-              mkdir -p /workspace/profile_archiso/efiboot/loader/entries
+              sed -i 's/archisolabel=%ARCHISO_LABEL%/archisolabel=%ARCHISO_LABEL% copytoram=y/g' /usr/share/archiso/configs/releng/syslinux/archiso_sys-linux.cfg || true
+              if [ -d "/usr/share/archiso/configs/releng/efiboot" ]; then
+                find /usr/share/archiso/configs/releng/efiboot -type f -exec sed -i 's/archisolabel=%ARCHISO_LABEL%/archisolabel=%ARCHISO_LABEL% copytoram=y/g' {} + || true
+              fi
+
               cp -r /usr/share/archiso/configs/releng/syslinux /workspace/profile_archiso/
-              cp -r /usr/share/archiso/configs/releng/efiboot /workspace/profile_archiso/
-
-              mkdir -p /workspace/profile_archiso/airootfs/etc
-              echo 'HOOKS=(base systemd autodetect microcode modconf kms keyboard sd-vconsole block filesystems archiso)' > /workspace/profile_archiso/airootfs/etc/mkinitcpio.conf
-
-              find /workspace/profile_archiso/syslinux -type f -exec sed -i 's/%ARCHISO_LABEL%/HACKARCH_LIVE/g' {} + || true
-              find /workspace/profile_archiso/syslinux -type f -exec sed -i 's/archisosearchuuid=%ARCHISO_UUID%/archisolabel=HACKARCH_LIVE/g' {} + || true
-              find /workspace/profile_archiso/efiboot -type f -exec sed -i 's/%ARCHISO_LABEL%/HACKARCH_LIVE/g' {} + || true
-              find /workspace/profile_archiso/efiboot -type f -exec sed -i 's/archisosearchuuid=%ARCHISO_UUID%/archisolabel=HACKARCH_LIVE/g' {} + || true
+              if [ -d "/usr/share/archiso/configs/releng/efiboot" ]; then
+                cp -r /usr/share/archiso/configs/releng/efiboot /workspace/profile_archiso/
+              fi
 
               HOME=/workspace/profile_archiso/airootfs/etc/skel nvim --headless '+Lazy! sync' +qa || true &&
 
