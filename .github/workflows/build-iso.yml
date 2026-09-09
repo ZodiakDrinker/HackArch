@@ -66,15 +66,8 @@ jobs:
               pacman-key --populate archlinux &&
               pacman -Syu --noconfirm archiso neovim git syslinux curl &&
 
-              sed -i 's/archisolabel=%ARCHISO_LABEL%/archisolabel=%ARCHISO_LABEL% copytoram=y/g' /usr/share/archiso/configs/releng/syslinux/archiso_sys-linux.cfg || true
-              if [ -d "/usr/share/archiso/configs/releng/efiboot" ]; then
-                find /usr/share/archiso/configs/releng/efiboot -type f -exec sed -i 's/archisolabel=%ARCHISO_LABEL%/archisolabel=%ARCHISO_LABEL% copytoram=y/g' {} + || true
-              fi
-
-              cp -r /usr/share/archiso/configs/releng/syslinux /workspace/profile_archiso/
-              if [ -d "/usr/share/archiso/configs/releng/efiboot" ]; then
-                cp -r /usr/share/archiso/configs/releng/efiboot /workspace/profile_archiso/
-              fi
+              find /usr/share/archiso/ -type f \( -name "*.cfg" -o -name "*.conf" -o -name "*.entry" \) -exec sed -i 's/archisolabel=%ARCHISO_LABEL%/archisolabel=%ARCHISO_LABEL% copytoram=y/g' {} + || true
+              find /usr/share/archiso/ -type f \( -name "*.cfg" -o -name "*.conf" -o -name "*.entry" \) -exec sed -i 's/archisosearchuuid=%ARCHISO_UUID%/archisolabel=%ARCHISO_LABEL% copytoram=y/g' {} + || true
 
               HOME=/workspace/profile_archiso/airootfs/etc/skel nvim --headless '+Lazy! sync' +qa || true &&
 
