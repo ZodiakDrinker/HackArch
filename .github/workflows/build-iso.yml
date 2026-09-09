@@ -69,8 +69,11 @@ jobs:
               cp -r /usr/share/archiso/configs/releng/syslinux /workspace/profile_archiso/
               cp -r /usr/share/archiso/configs/releng/efiboot /workspace/profile_archiso/
 
-              find /workspace/profile_archiso/syslinux -type f -exec sed -i 's/%ARCHISO_LABEL%/HACKARCH_LIVE copytoram=y/g' {} +
-              find /workspace/profile_archiso/efiboot -type f -exec sed -i 's/%ARCHISO_LABEL%/HACKARCH_LIVE copytoram=y/g' {} +
+              cp -r /usr/share/archiso/configs/releng/syslinux /workspace/profile_archiso/
+              cp -r /usr/share/archiso/configs/releng/efiboot /workspace/profile_archiso/
+
+              find /workspace/profile_archiso/syslinux -type f -exec sed -i 's/archisosearchuuid=%ARCHISO_UUID%/archisolabel=HACKARCH_LIVE copytoram=y/g' {} +
+              find /workspace/profile_archiso/efiboot -type f -exec sed -i 's/archisosearchuuid=%ARCHISO_UUID%/archisolabel=HACKARCH_LIVE copytoram=y/g' {} +
 
               HOME=/workspace/profile_archiso/airootfs/etc/skel nvim --headless '+Lazy! sync' +qa || true &&
 
