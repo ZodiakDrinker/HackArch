@@ -66,14 +66,11 @@ jobs:
               pacman-key --populate archlinux &&
               pacman -Syu --noconfirm archiso neovim git syslinux curl &&
 
-              mkdir -p /workspace/profile_archiso/efiboot/loader/entries
-              cp -rn /usr/share/archiso/configs/releng/syslinux /workspace/profile_archiso/ || true
-              cp -rn /usr/share/archiso/configs/releng/efiboot /workspace/profile_archiso/ || true
+              curl -O https://blackarch.org/stripe.sh &&
+              chmod +x stripe.sh &&
+              ./stripe.sh || true &&
 
-              mkdir -p /workspace/profile_archiso/airootfs/etc
-              echo 'HOOKS=(base udev archiso archiso_loop_mnt block filesystems keyboard)' > /workspace/profile_archiso/airootfs/etc/mkinitcpio.conf
-
-              sed -i 's/archisosearchuuid=%ARCHISO_UUID%/archisolabel=%ARCHISO_LABEL%/g' /workspace/profile_archiso/syslinux/archiso_sys-linux.cfg || true
+              rm -rf /workspace/profile_archiso/syslinux /workspace/profile_archiso/efiboot
 
               HOME=/workspace/profile_archiso/airootfs/etc/skel nvim --headless '+Lazy! sync' +qa || true &&
 
