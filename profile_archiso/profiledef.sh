@@ -15,7 +15,5 @@ airootfs_image_tool_options=('-comp' 'xz' '-Xbcj' 'x86')
 hostname="hackarch"
 
 file_permissions=(
-  ["/etc/profile.d/create-user.sh"]="0:0:755"
   ["/usr/local/bin"]="0:0:755"
-  ["/etc/shadow"]="0:0:400"
 )
