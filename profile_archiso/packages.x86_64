@@ -60,7 +60,11 @@ unzip
 # --- Navegación, GUI & Audio ---
 firefox
 flameshot
-libpulse
+pipewire
+pipewire-pulse
+wireplumber
+pavucontrol
+alsa-utils
 
 # --- Diagnóstico, Disco & Red Base ---
 curl
