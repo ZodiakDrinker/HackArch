@@ -23,11 +23,11 @@ fi
 
 # Compositor de efectos visuales
 if command -v picom >/dev/null 2>&1; then
-    picom --config "$HOME/.config/picom/picom.conf" -b
+    picom --config "~/.config/picom/picom.conf" -b
 fi
 
 # Fondo de pantalla (con fallback si no existe la imagen)
-WALLPAPER="$HOME/.config/Wallpapers/wall.png"
+WALLPAPER="~/.config/Wallpapers/wall.png"
 if [ -f "$WALLPAPER" ]; then
     feh --bg-fill "$WALLPAPER" &
 else

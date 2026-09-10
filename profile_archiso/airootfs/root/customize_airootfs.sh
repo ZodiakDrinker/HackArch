@@ -8,7 +8,7 @@ if ! id zodiak >/dev/null 2>&1; then
         -k /etc/skel \
         -u 1000 \
         -G wheel,video,audio,storage,network \
-        -s /bin/bash \
+        -s /bin/zsh \
         zodiak
 fi
 
