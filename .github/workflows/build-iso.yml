@@ -15,35 +15,68 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Inject Firefox Extensions (FoxyProxy & Wappalyzer)
+      - name: Download & Install Caido Desktop
         run: |
-          EXT_DIR="profile_archiso/airootfs/etc/skel/.mozilla/firefox/hackarch.default-release/extensions"
-          mkdir -p "$EXT_DIR"
+          set -euo pipefail
 
-          # 1. Descargar FoxyProxy Standard
-          curl -sL "https://addons.mozilla.org/firefox/downloads/latest/foxyproxy-standard/latest.xpi" \
-            -o "$EXT_DIR/foxyproxy@patacango.com.xpi"
+          CAIDO_DIR="profile_archiso/airootfs/opt/caido"
+          BIN_DIR="profile_archiso/airootfs/usr/local/bin"
 
-          # 2. Descargar Wappalyzer
-          curl -sL "https://addons.mozilla.org/firefox/downloads/latest/wappalyzer/latest.xpi" \
-            -o "$EXT_DIR/wappalyzer@gapplify.com.xpi"
+          mkdir -p "$CAIDO_DIR" "$BIN_DIR"
 
-      - name: Download & Inject Caido Desktop Binary
-        run: |
-          CAIDO_DIR="profile_archiso/airootfs/usr/local/bin"
-          mkdir -p "$CAIDO_DIR"
+          echo "==> Obteniendo última versión de Caido..."
 
-          DOWNLOAD_URL=$(curl -s https://api.github.com/repos/caido/caido/releases/latest | grep -o 'https://caido.download/releases/[^/"]*/caido-desktop-[^/"]*-linux-x86_64\.tar\.gz' | head -n 1)
+          DOWNLOAD_URL="$(
+            curl -fsSL https://api.github.com/repos/caido/caido/releases/latest |
+            grep -oE 'https://caido\.download/releases/[^"]*/caido-desktop-[^"]*-linux-x86_64\.tar\.gz' |
+            head -n 1
+          )"
 
-          curl -sL "$DOWNLOAD_URL" | tar -xz -C "$CAIDO_DIR"
+          if [ -z "$DOWNLOAD_URL" ]; then
+            echo "ERROR: No se encontró el archivo de Caido."
+            exit 1
+          fi
 
-          chmod +x "$CAIDO_DIR"/caido* || true
+          echo "==> URL: $DOWNLOAD_URL"
 
-      - name: Enable NetworkManager Service
-        run: |
-          WANTS_DIR="profile_archiso/airootfs/etc/systemd/system/multi-user.target.wants"
-          mkdir -p "$WANTS_DIR"
-          ln -sf /usr/lib/systemd/system/NetworkManager.service "$WANTS_DIR/NetworkManager.service"
+          TMP_DIR="$(mktemp -d)"
+          trap 'rm -rf "$TMP_DIR"' EXIT
+
+          curl -fL "$DOWNLOAD_URL" -o "$TMP_DIR/caido.tar.gz"
+
+          echo "==> Contenido del archivo:"
+          tar -tzf "$TMP_DIR/caido.tar.gz"
+
+          echo "==> Extrayendo Caido..."
+          tar -xzf "$TMP_DIR/caido.tar.gz" -C "$CAIDO_DIR"
+
+          echo "==> Archivos instalados:"
+          find "$CAIDO_DIR" -maxdepth 4 -type f -print
+
+          # Buscar el ejecutable principal
+          CAIDO_BIN="$(
+            find "$CAIDO_DIR" -type f \
+              \( -name "caido" -o -name "caido-desktop" \) \
+              | head -n 1
+          )"
+
+          if [ -z "$CAIDO_BIN" ]; then
+            echo "ERROR: No se encontró el ejecutable de Caido."
+            exit 1
+          fi
+
+          chmod +x "$CAIDO_BIN"
+
+          ln -sf "$CAIDO_BIN" "$BIN_DIR/caido"
+
+          echo "==> Caido instalado:"
+          ls -lah "$CAIDO_BIN"
+          ls -lah "$BIN_DIR/caido"
+            - name: Enable NetworkManager Service
+              run: |
+                WANTS_DIR="profile_archiso/airootfs/etc/systemd/system/multi-user.target.wants"
+                mkdir -p "$WANTS_DIR"
+                ln -sf /usr/lib/systemd/system/NetworkManager.service "$WANTS_DIR/NetworkManager.service"
 
       - name: Free Disk Space
         run: |

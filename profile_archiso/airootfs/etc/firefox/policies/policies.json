@@ -7,6 +7,22 @@
     },
     "DisableAppUpdate": true,
     "OverrideFirstRunPage": "",
-    "OverridePostUpdatePage": ""
+    "OverridePostUpdatePage": "",
+    "Proxy": {
+      "Mode": "autoConfig",
+      "AutoConfigURL": "file:///etc/i2pd/proxy.pac"
+    },
+
+    "ExtensionSettings": {
+      "foxyproxy@patacango.com": {
+        "installation_mode": "force_installed",
+        "install_url": "https://addons.mozilla.org/firefox/downloads/latest/foxyproxy-standard/latest.xpi"
+      },
+
+      "wappalyzer@gapplify.com": {
+        "installation_mode": "force_installed",
+        "install_url": "https://addons.mozilla.org/firefox/downloads/latest/wappalyzer/latest.xpi"
+      }
+    }
   }
 }
