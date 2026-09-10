@@ -22,19 +22,11 @@ if command -v vmware-user-suid-wrapper >/dev/null 2>&1; then
 fi
 
 # Compositor de efectos visuales
-if command -v picom >/dev/null 2>&1; then
-    picom --config "$HOME/.config/picom/picom.conf" -b
-fi
+picom --config "$HOME/.config/picom/picom.conf" -b
 
 # Fondo de pantalla (con fallback si no existe la imagen)
 WALLPAPER="$HOME/.config/Wallpapers/wall.png"
-if [ -f "$WALLPAPER" ]; then
-    feh --bg-fill "$WALLPAPER" &
-else
-    xsetroot -solid "#1e1e2e" &
-fi
+feh --bg-fill "$WALLPAPER" &
 
 # Iniciar Polybar
-if [ -x "$HOME/.config/polybar/launch.sh" ]; then
-    "$HOME/.config/polybar/launch.sh" --hack &
-fi
+"$HOME/.config/polybar/launch.sh" --hack &
