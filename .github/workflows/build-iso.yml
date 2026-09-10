@@ -64,9 +64,22 @@ jobs:
             /bin/bash -c "
               pacman-key --init &&
               pacman-key --populate archlinux &&
-              pacman -Syu --noconfirm archiso neovim git syslinux curl &&     
+              pacman -Syu --noconfirm archiso neovim git syslinux curl &&
+
+              echo '=== ARCHISO VERSION ===' &&
+              pacman -Q archiso mkinitcpio mkinitcpio-archiso || true &&
+
+              echo '=== PROFILE MKINITCPIO ===' &&
+              find /workspace/profile_archiso/airootfs/etc/mkinitcpio.conf.d -maxdepth 1 -type f -print -exec cat {} \; || true &&
+
+              echo '=== OFFICIAL RELENG MKINITCPIO ===' &&
+
+              find /usr/share/archiso/configs/releng/airootfs/etc/mkinitcpio.conf.d -maxdepth 1 -type f -print -exec cat {} \; || true &&
 
               HOME=/workspace/profile_archiso/airootfs/etc/skel nvim --headless '+Lazy! sync' +qa || true &&
+
+              cp -r /usr/share/archiso/configs/releng/syslinux /workspace/profile_archiso/
+              cp -r /usr/share/archiso/configs/releng/efiboot /workspace/profile_archiso/
 
               mkarchiso -v -w /tmp/archiso-tmp -o /workspace/out /workspace/profile_archiso
             "
