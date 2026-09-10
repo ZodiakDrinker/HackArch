@@ -64,16 +64,7 @@ jobs:
             /bin/bash -c "
               pacman-key --init &&
               pacman-key --populate archlinux &&
-              pacman -Syu --noconfirm archiso neovim git syslinux curl &&
-
-              cp -r /usr/share/archiso/configs/releng/syslinux /workspace/profile_archiso/
-              cp -r /usr/share/archiso/configs/releng/efiboot /workspace/profile_archiso/
-
-              cp -r /usr/share/archiso/configs/releng/syslinux /workspace/profile_archiso/
-              cp -r /usr/share/archiso/configs/releng/efiboot /workspace/profile_archiso/
-
-              find /workspace/profile_archiso/syslinux -type f -exec sed -i 's/archisosearchuuid=%ARCHISO_UUID%/archisolabel=HACKARCH_LIVE copytoram=y/g' {} +
-              find /workspace/profile_archiso/efiboot -type f -exec sed -i 's/archisosearchuuid=%ARCHISO_UUID%/archisolabel=HACKARCH_LIVE copytoram=y/g' {} +
+              pacman -Syu --noconfirm archiso neovim git syslinux curl &&     
 
               HOME=/workspace/profile_archiso/airootfs/etc/skel nvim --headless '+Lazy! sync' +qa || true &&
 

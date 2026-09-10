@@ -2,17 +2,21 @@
 # HackArch - Live ISO Packages
 # ==========================================
 
+# --- Bootload ---
+mkinitcpio
+mkinitcpio-archiso
+memtest86+-efi
+memtest86+
+edk2-shell
+syslinux
+systemd
+
 # --- Base & Kernel ---
 base
 linux
 linux-firmware
 sudo
 openssh
-syslinux
-systemd
-memtest86+-efi
-memtest86+
-edk2-shell
 
 # --- Pila base de red y Wi-Fi ---
 networkmanager
