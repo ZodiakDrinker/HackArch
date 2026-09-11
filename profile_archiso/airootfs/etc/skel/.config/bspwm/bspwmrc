@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Cursor
+xsetroot -cursor_name left_ptr &
+
 # Iniciar gestor de atajos de teclado
 pgrep -x sxhkd > /dev/null || sxhkd &
 
