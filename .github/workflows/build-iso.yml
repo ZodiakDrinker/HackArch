@@ -88,13 +88,9 @@ jobs:
               pacman-key --init &&
               pacman-key --populate archlinux &&
               pacman -Syu --noconfirm archiso neovim git syslinux curl &&
-              HOME=/workspace/profile_archiso/airootfs/etc/skel nvim --headless '+Lazy! sync' +qa || true &&
               cp -r /usr/share/archiso/configs/releng/syslinux /workspace/profile_archiso/
               cp -r /usr/share/archiso/configs/releng/efiboot /workspace/profile_archiso/
-              find /workspace/profile_archiso/syslinux -type f \( -name "*.cfg" -o -name "*.conf" \) -exec sed -i 's/archisosearchuuid=%ARCHISO_UUID%/archisosearchuuid=%ARCHISO_UUID% copytoram=y/g' {} + || true
-              find /workspace/profile_archiso/syslinux -type f \( -name "*.cfg" -o -name "*.conf" \) -exec sed -i 's/archisolabel=%ARCHISO_LABEL%/archisolabel=%ARCHISO_LABEL% copytoram=y/g' {} + || true
-              find /workspace/profile_archiso/efiboot -type f \( -name "*.cfg" -o -name "*.conf" -o -name "*.entry" \) -exec sed -i 's/archisosearchuuid=%ARCHISO_UUID%/archisosearchuuid=%ARCHISO_UUID% copytoram=y/g' {} + || true
-              find /workspace/profile_archiso/efiboot -type f \( -name "*.cfg" -o -name "*.conf" -o -name "*.entry" \) -exec sed -i 's/archisolabel=%ARCHISO_LABEL%/archisolabel=%ARCHISO_LABEL% copytoram=y/g' {} + || true
+              HOME=/workspace/profile_archiso/airootfs/etc/skel nvim --headless '+Lazy! sync' +qa || true &&
               mkarchiso -v -w /tmp/archiso-tmp -o /workspace/out /workspace/profile_archiso
             "
       - name: Upload ISO Artifact
