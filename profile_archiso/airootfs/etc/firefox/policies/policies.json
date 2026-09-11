@@ -14,12 +14,12 @@
     },
 
     "ExtensionSettings": {
-      "foxyproxy@patacango.com": {
+      "foxyproxy@eric.h.jung": {
         "installation_mode": "force_installed",
         "install_url": "https://addons.mozilla.org/firefox/downloads/latest/foxyproxy-standard/latest.xpi"
       },
 
-      "wappalyzer@gapplify.com": {
+      "wappalyzer@crunchlabz.com": {
         "installation_mode": "force_installed",
         "install_url": "https://addons.mozilla.org/firefox/downloads/latest/wappalyzer/latest.xpi"
       }
