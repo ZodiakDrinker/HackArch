@@ -14,6 +14,10 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq file curl
       - name: Download & Inject Caido Desktop
         run: |
           set -e
@@ -72,51 +76,182 @@ jobs:
           sudo rm -rf /opt/ghc
           sudo rm -rf /opt/hostedtoolcache/CodeQL
           sudo docker image prune --all --force
-          df -h
+          df -h 
       - name: Build Archiso in Arch Linux Container
         run: |
+          set -e
+
           mkdir -p out/
+
           docker run --privileged --rm \
             -v "$PWD:/workspace" \
             -w /workspace \
             archlinux:latest \
-            /bin/bash -c "
-              pacman-key --init &&
-              pacman-key --populate archlinux &&
-              pacman -Syu --noconfirm archiso neovim git syslinux curl &&
+            /bin/bash -c '
 
-              HOME=/workspace/profile_archiso/airootfs/etc/skel nvim --headless '+Lazy! sync' +qa || true &&
+          set -euo pipefail
 
-              cp -r /usr/share/archiso/configs/releng/syslinux /workspace/profile_archiso/
-              cp -r /usr/share/archiso/configs/releng/efiboot /workspace/profile_archiso/
+          echo "======================================"
+          echo " 1. Inicializando pacman"
+          echo "======================================"
 
-              echo "=== Activando copytoram en Syslinux ==="
+          pacman-key --init
+          pacman-key --populate archlinux
 
-              find /workspace/profile_archiso/syslinux -type f -name '*.cfg' -print0 |
-              while IFS= read -r -d '' file; do
-                  sed -i -E '/^[[:space:]]*APPEND[[:space:]]/ {
-                      /(^|[[:space:]])copytoram([[:space:]]|$)/! s/[[:space:]]*$/ copytoram/
-                  }' "$file"
-              done
+          echo "======================================"
+          echo " 2. Instalando herramientas de build"
+          echo "======================================"
 
-              echo "=== Activando copytoram en systemd-boot ==="
+          pacman -Syu --noconfirm \
+            archiso \
+            neovim \
+            git \
+            syslinux \
+            curl
 
-              find /workspace/profile_archiso/efiboot/loader/entries \
-                  -type f -name '*.conf' -print0 |
-              while IFS= read -r -d '' file; do
-                  sed -i -E '/^[[:space:]]*options[[:space:]]/ {
-                      /(^|[[:space:]])copytoram([[:space:]]|$)/! s/[[:space:]]*$/ copytoram/
-                  }' "$file"
-              done
+          echo "======================================"
+          echo " 3. Sincronizando Neovim"
+          echo "======================================"
 
-              echo '=== Verificación Syslinux ==='
-              grep -Rni -- 'copytoram' /workspace/profile_archiso/syslinux || true
+          HOME=/workspace/profile_archiso/airootfs/etc/skel \
+            nvim --headless "+Lazy! sync" +qa || true
 
-              echo "=== Verificación systemd-boot ==="
-              grep -Rni -- 'copytoram' /workspace/profile_archiso/efiboot || true
+          echo "======================================"
+          echo " 4. Preparando bootloaders"
+          echo "======================================"
 
-              mkarchiso -v -w /tmp/archiso-tmp -o /workspace/out /workspace/profile_archiso
-            "
+          rm -rf /workspace/profile_archiso/syslinux
+          rm -rf /workspace/profile_archiso/efiboot
+
+          cp -r \
+            /usr/share/archiso/configs/releng/syslinux \
+            /workspace/profile_archiso/
+
+          cp -r \
+            /usr/share/archiso/configs/releng/efiboot \
+            /workspace/profile_archiso/
+
+          echo "Bootloaders copiados."
+
+          echo "======================================"
+          echo " 5. Activando copytoram"
+          echo "======================================"
+
+          echo "--- Syslinux ---"
+
+          find /workspace/profile_archiso/syslinux \
+            -type f \
+            -name "*.cfg" \
+            -print0 |
+          while IFS= read -r -d "" file; do
+
+            echo "Procesando: $file"
+
+            sed -i -E \
+              "/^[[:space:]]*APPEND[[:space:]]/ {
+                /(^|[[:space:]])copytoram([[:space:]]|$)/! s/[[:space:]]*$/ copytoram/
+              }" "$file"
+
+          done
+
+          echo "--- systemd-boot ---"
+
+          if [ -d "/workspace/profile_archiso/efiboot/loader/entries" ]; then
+
+            find /workspace/profile_archiso/efiboot/loader/entries \
+              -type f \
+              -name "*.conf" \
+              -print0 |
+            while IFS= read -r -d "" file; do
+
+              echo "Procesando: $file"
+
+              sed -i -E \
+                "/^[[:space:]]*options[[:space:]]/ {
+                  /(^|[[:space:]])copytoram([[:space:]]|$)/! s/[[:space:]]*$/ copytoram/
+                }" "$file"
+
+            done
+
+          else
+
+            echo "ADVERTENCIA: no existe loader/entries"
+
+          fi
+
+          echo "======================================"
+          echo " 6. Verificando copytoram"
+          echo "======================================"
+
+          echo "--- Syslinux ---"
+
+          grep -Rni -- "copytoram" \
+            /workspace/profile_archiso/syslinux
+
+          echo "--- systemd-boot ---"
+
+          grep -Rni -- "copytoram" \
+            /workspace/profile_archiso/efiboot || true
+
+          echo "======================================"
+          echo " 7. Comprobando profile"
+          echo "======================================"
+
+          ls -la /workspace/profile_archiso/
+
+          echo "======================================"
+          echo " 8. Construyendo ISO"
+          echo "======================================"
+
+          rm -rf /tmp/archiso-tmp
+
+          mkdir -p /workspace/out
+
+          mkarchiso \
+            -v \
+            -w /tmp/archiso-tmp \
+            -o /workspace/out \
+            /workspace/profile_archiso
+
+          echo "======================================"
+          echo " 9. Resultado"
+          echo "======================================"
+
+          echo "Contenido de /workspace/out:"
+          ls -lah /workspace/out
+
+          echo "======================================"
+          echo " Buscando ISO"
+          echo "======================================"
+
+          find /workspace/out \
+            -maxdepth 1 \
+            -type f \
+            -name "*.iso" \
+            -ls
+
+          if ! find /workspace/out \
+            -maxdepth 1 \
+            -type f \
+            -name "*.iso" \
+            | grep -q .; then
+
+            echo "ERROR: mkarchiso terminó pero no se encontró ninguna ISO."
+            exit 1
+
+          fi
+
+          echo "======================================"
+          echo " BUILD COMPLETADO CORRECTAMENTE"
+          echo "======================================"
+
+          '
+
+          echo "======================================"
+          echo " ISO GENERADA EN EL RUNNER"
+          echo "======================================"
+
+          ls -lah out/
       - name: Upload ISO Artifact
         uses: actions/upload-artifact@v4
         with:
