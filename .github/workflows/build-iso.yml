@@ -16,28 +16,55 @@ jobs:
         uses: actions/checkout@v4
       - name: Download & Inject Caido Desktop
         run: |
+          set -e
+
           CAIDO_DIR="profile_archiso/airootfs/usr/local/bin"
           mkdir -p "$CAIDO_DIR"
 
-          CAIDO_URL=$(curl -fsSL \
-            https://api.github.com/repos/caido/caido/releases/latest |
-            sed -n 's/.*"browser_download_url": "\([^"]*linux-x86_64[^"]*\.AppImage\)".*/\1/p' |
-            head -n 1)
+          echo "======================================"
+          echo " Descargando Caido Desktop"
+          echo "======================================"
 
-          if [ -z "$CAIDO_URL" ]; then
-            echo "ERROR: No se encontró el AppImage de Caido"
+          CAIDO_URL=$(
+            curl -fsSL https://caido.download/releases/latest |
+            jq -r '
+              .links[]
+              | select(
+                  .os == "linux"
+                  and .arch == "x86_64"
+                  and .kind == "desktop"
+                  and .format == "AppImage"
+                )
+              | .link
+            ' |
+            head -n 1
+          )
+
+          if [ -z "$CAIDO_URL" ] || [ "$CAIDO_URL" = "null" ]; then
+            echo "ERROR: No se encontró la AppImage de Caido"
             exit 1
           fi
 
-          echo "Descargando Caido desde:"
+          echo "URL:"
           echo "$CAIDO_URL"
 
-          curl -fL "$CAIDO_URL" \
+          curl -fL \
+            "$CAIDO_URL" \
             -o "$CAIDO_DIR/caido"
 
           chmod 755 "$CAIDO_DIR/caido"
 
-          "$CAIDO_DIR/caido" --version || true
+          echo "Archivo descargado:"
+          file "$CAIDO_DIR/caido"
+
+          if ! file "$CAIDO_DIR/caido" | grep -qi "ELF\|AppImage"; then
+            echo "ERROR: Caido descargado pero el archivo no parece ejecutable"
+            exit 1
+          fi
+
+          ls -lh "$CAIDO_DIR/caido"
+
+          echo "Caido correctamente integrado en la airootfs"
       - name: Free Disk Space
         run: |
           sudo rm -rf /usr/share/dotnet
