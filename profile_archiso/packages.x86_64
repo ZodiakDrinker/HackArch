@@ -50,8 +50,6 @@ neovim
 git
 ripgrep
 fd
-make
-gcc
 unzip
 
 # --- Navegación, GUI & Audio ---
@@ -69,15 +67,12 @@ bind
 iproute2
 smartmontools
 hdparm
-sdparm
 ddrescue
 testdisk
-gparted
 parted
 e2fsprogs
 dosfstools
 ntfs-3g
-cifs-utils
 nfs-utils
 
 # --- Deepweb / Anonimato ---
@@ -90,7 +85,6 @@ bloodyad
 certipy
 coercer
 python-ldapdomaindump
-bloodhound
 bloodhound-python
 python-lsassy
 evil-winrm
@@ -108,7 +102,6 @@ naabu
 # --- Auditoría: Web & Fuzzing ---
 ffuf
 gobuster
-burpsuite
 nuclei
 subfinder
 httpx
