@@ -14,61 +14,53 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-      - name: Install build dependencies
+
+      - name: Download & Install Caido Desktop
         run: |
-          sudo apt-get update
-          sudo apt-get install -y jq file curl
-      - name: Download & Inject Caido Desktop
-        run: |
-          set -e
-
-          CAIDO_DIR="profile_archiso/airootfs/usr/local/bin"
-          mkdir -p "$CAIDO_DIR"
-
-          echo "======================================"
-          echo " Descargando Caido Desktop"
-          echo "======================================"
-
-          CAIDO_URL=$(
-            curl -fsSL https://caido.download/releases/latest |
-            jq -r '
-              .links[]
-              | select(
-                  .os == "linux"
-                  and .arch == "x86_64"
-                  and .kind == "desktop"
-                  and .format == "AppImage"
-                )
-              | .link
-            ' |
+          set -euo pipefail
+          CAIDO_DIR="profile_archiso/airootfs/opt/caido"
+          BIN_DIR="profile_archiso/airootfs/usr/local/bin"
+          mkdir -p "$CAIDO_DIR" "$BIN_DIR"
+          echo "==> Obteniendo última versión de Caido..."
+          TAG="$(
+            curl -fsSL https://api.github.com/repos/caido/caido/releases/latest |
+            grep '"tag_name":' |
+            head -n 1 |
+            sed -E 's/.*"tag_name": "([^"]+)".*/\1/'
+          )"
+          if [ -z "$TAG" ]; then
+            echo "ERROR: No se pudo obtener la versión de Caido."
+            exit 1
+          fi
+          echo "==> Versión: $TAG"
+          DOWNLOAD_URL="https://caido.download/releases/${TAG}/caido-desktop-${TAG}-linux-x86_64.tar.gz"
+          echo "==> URL: $DOWNLOAD_URL"
+          TMP_DIR="$(mktemp -d)"
+          trap 'rm -rf "$TMP_DIR"' EXIT
+          curl -fL "$DOWNLOAD_URL" \
+            -o "$TMP_DIR/caido.tar.gz"
+          echo "==> Contenido del paquete:"
+          tar -tzf "$TMP_DIR/caido.tar.gz"
+          echo "==> Extrayendo Caido..."
+          tar -xzf "$TMP_DIR/caido.tar.gz" -C "$CAIDO_DIR"
+          echo "==> Archivos instalados:"
+          find "$CAIDO_DIR" -maxdepth 4 -type f -print
+          CAIDO_BIN="$(
+            find "$CAIDO_DIR" -type f \
+              \( -name "caido" -o -name "caido-desktop" \) |
             head -n 1
-          )
-
-          if [ -z "$CAIDO_URL" ] || [ "$CAIDO_URL" = "null" ]; then
-            echo "ERROR: No se encontró la AppImage de Caido"
+          )"
+          if [ -z "$CAIDO_BIN" ]; then
+            echo "ERROR: No se encontró el ejecutable de Caido."
+            echo "Contenido de /opt/caido:"
+            find "$CAIDO_DIR" -maxdepth 5 -print
             exit 1
           fi
-
-          echo "URL:"
-          echo "$CAIDO_URL"
-
-          curl -fL \
-            "$CAIDO_URL" \
-            -o "$CAIDO_DIR/caido"
-
-          chmod 755 "$CAIDO_DIR/caido"
-
-          echo "Archivo descargado:"
-          file "$CAIDO_DIR/caido"
-
-          if ! file "$CAIDO_DIR/caido" | grep -qi "ELF\|AppImage"; then
-            echo "ERROR: Caido descargado pero el archivo no parece ejecutable"
-            exit 1
-          fi
-
-          ls -lh "$CAIDO_DIR/caido"
-
-          echo "Caido correctamente integrado en la airootfs"
+          chmod +x "$CAIDO_BIN"
+          ln -sf "$CAIDO_BIN" "$BIN_DIR/caido"
+          echo "==> Caido instalado correctamente:"
+          ls -lah "$CAIDO_BIN"
+          ls -lah "$BIN_DIR/caido"
       - name: Free Disk Space
         run: |
           sudo rm -rf /usr/share/dotnet
@@ -76,7 +68,7 @@ jobs:
           sudo rm -rf /opt/ghc
           sudo rm -rf /opt/hostedtoolcache/CodeQL
           sudo docker image prune --all --force
-          df -h 
+          df -h
       - name: Build Archiso in Arch Linux Container
         run: |
           mkdir -p out/
@@ -88,9 +80,9 @@ jobs:
               pacman-key --init &&
               pacman-key --populate archlinux &&
               pacman -Syu --noconfirm archiso neovim git syslinux curl &&
+              HOME=/workspace/profile_archiso/airootfs/etc/skel nvim --headless '+Lazy! sync' +qa || true &&
               cp -r /usr/share/archiso/configs/releng/syslinux /workspace/profile_archiso/
               cp -r /usr/share/archiso/configs/releng/efiboot /workspace/profile_archiso/
-              HOME=/workspace/profile_archiso/airootfs/etc/skel nvim --headless '+Lazy! sync' +qa || true &&
               mkarchiso -v -w /tmp/archiso-tmp -o /workspace/out /workspace/profile_archiso
             "
       - name: Upload ISO Artifact
