@@ -120,6 +120,7 @@ jobs:
             sed -i -E \
               "/^[[:space:]]*APPEND[[:space:]]/ {
                 /(^|[[:space:]])copytoram([[:space:]]|$)/! s/[[:space:]]*$/ copytoram/
+                /(^|[[:space:]])copytoram_size=/! s/[[:space:]]*$/ copytoram_size=90%/
               }" "$file"
           done
           echo "--- systemd-boot ---"
@@ -133,6 +134,7 @@ jobs:
               sed -i -E \
                 "/^[[:space:]]*options[[:space:]]/ {
                   /(^|[[:space:]])copytoram([[:space:]]|$)/! s/[[:space:]]*$/ copytoram/
+                  /(^|[[:space:]])copytoram_size=/! s/[[:space:]]*$/ copytoram_size=90%/
                 }" "$file"
             done
           else

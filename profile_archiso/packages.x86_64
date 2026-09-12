@@ -5,9 +5,6 @@
 # --- Bootload ---
 mkinitcpio
 mkinitcpio-archiso
-memtest86+-efi
-memtest86+
-edk2-shell
 syslinux
 systemd
 
@@ -36,7 +33,6 @@ feh
 kitty
 ttf-hack-nerd
 wmname
-wmctrl
 
 # --- Shell & Terminal Moderno ---
 zsh
@@ -64,17 +60,13 @@ flameshot
 pipewire
 pipewire-pulse
 wireplumber
-pavucontrol
 alsa-utils
 
 # --- Diagnóstico, Disco & Red Base ---
 curl
 git
 bind
-dhclient
-dhcpcd
 iproute2
-net-tools
 smartmontools
 hdparm
 sdparm
