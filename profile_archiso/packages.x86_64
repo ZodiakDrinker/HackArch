@@ -16,7 +16,7 @@ base
 linux
 linux-firmware
 sudo
-fuze2
+fuse2
 openssh
 
 # --- Pila base de red y Wi-Fi ---
