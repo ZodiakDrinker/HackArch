@@ -136,13 +136,13 @@ super + ctrl + alt + {Left,Down,Up,Right}
 
 # Raise Volume (Limit 100%)
 XF86AudioRaiseVolume
-	VOL=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -Po '\d+(?=%)' | head -n 1); \
-	[ "$VOL" -lt 100 ] && pactl set-sink-volume @DEFAULT_SINK@ +5%
+	VOL=$(wpctl get-sink-volume @DEFAULT_SINK@ | grep -Po '\d+(?=%)' | head -n 1); \
+	[ "$VOL" -lt 100 ] && wpctl set-sink-volume @DEFAULT_SINK@ +5%
 
 # Lower Volume
 XF86AudioLowerVolume
-	pactl set-sink-volume @DEFAULT_SINK@ -5%
+	wpctl set-sink-volume @DEFAULT_SINK@ -5%
 
 # Mute / Unmute
 XF86AudioMute
-	pactl set-sink-mute @DEFAULT_SINK@ toggle
+	wpctl set-sink-mute @DEFAULT_SINK@ toggle

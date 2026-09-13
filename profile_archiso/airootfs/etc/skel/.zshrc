@@ -94,4 +94,6 @@ if [ -z "$DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
     exec startx
 fi
 
+export PATH=$PATH/mnt/hackarch/exploitdb/searchsploit
+
 eval "$(starship init zsh)"
