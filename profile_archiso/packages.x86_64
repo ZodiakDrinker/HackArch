@@ -20,6 +20,8 @@ openssh
 networkmanager
 wpa_supplicant
 iw
+bluez
+bluez-utils
 
 # --- Entorno Gráfico & Display ---
 xorg-server
@@ -44,6 +46,7 @@ bat
 lsd
 fzf
 xclip
+mlocate
 
 # --- Entorno Neovim ---
 neovim
