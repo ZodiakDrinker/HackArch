@@ -26,6 +26,7 @@ bluez-utils
 # --- Entorno Gráfico & Display ---
 xorg-server
 xorg-xinit
+xorg-xsetroot
 bspwm
 sxhkd
 picom
@@ -112,4 +113,7 @@ httpx
 # --- Auditoría: Criptografía & Repos ---
 john
 hashcat
+
+# --- Keyrings ---
 blackarch-keyring
+archlinux-keyring
