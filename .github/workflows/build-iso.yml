@@ -120,7 +120,6 @@ jobs:
             sed -i -E \
               "/^[[:space:]]*APPEND[[:space:]]/ {
                 /(^|[[:space:]])copytoram([[:space:]]|$)/! s/[[:space:]]*$/ copytoram/
-                /(^|[[:space:]])copytoram_size=/! s/[[:space:]]*$/ copytoram_size=90%/
               }" "$file"
           done
           echo "--- systemd-boot ---"
@@ -134,7 +133,6 @@ jobs:
               sed -i -E \
                 "/^[[:space:]]*options[[:space:]]/ {
                   /(^|[[:space:]])copytoram([[:space:]]|$)/! s/[[:space:]]*$/ copytoram/
-                  /(^|[[:space:]])copytoram_size=/! s/[[:space:]]*$/ copytoram_size=90%/
                 }" "$file"
             done
           else
@@ -154,7 +152,12 @@ jobs:
           echo "======================================"
           ls -la /workspace/profile_archiso/
           echo "======================================"
-          echo " 8. Construyendo ISO"
+          echo " 8. Habilitando bluetooth"
+          echo "======================================"
+          mkdir -p /workspace/profile_archiso/airootfs/etc/systemd/system/multi-user.target.wants
+          ln -sf /usr/lib/systemd/system/bluetooth.service /workspace/profile_archiso/airootfs/etc/systemd/system/multi-user.target.wants/bluetooth.service
+          echo "======================================"
+          echo " 9. Construyendo ISO"
           echo "======================================"
           rm -rf /tmp/archiso-tmp
           mkdir -p /workspace/out
@@ -164,7 +167,7 @@ jobs:
             -o /workspace/out \
             /workspace/profile_archiso
           echo "======================================"
-          echo " 9. Resultado"
+          echo " 10. Resultado"
           echo "======================================"
           echo "Contenido de /workspace/out:"
           ls -lah /workspace/out
