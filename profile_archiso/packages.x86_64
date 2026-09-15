@@ -26,6 +26,7 @@ bluez-utils
 # --- Entorno Gráfico & Display ---
 xorg-server
 xorg-xinit
+xorg-xsetroot
 bspwm
 sxhkd
 picom
