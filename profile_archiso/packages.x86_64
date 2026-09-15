@@ -113,4 +113,7 @@ httpx
 # --- Auditoría: Criptografía & Repos ---
 john
 hashcat
+
+# --- Keyrings ---
 blackarch-keyring
+archlinux-keyring

@@ -81,6 +81,8 @@ jobs:
           echo "======================================"
           pacman-key --init
           pacman-key --populate archlinux
+          pacman -Sy --needed --noconfirm archlinux-keyring
+          pacman -Su --noconfirm
           echo "======================================"
           echo " 2. Instalando herramientas de build"
           echo "======================================"
