@@ -20,3 +20,4 @@ printf '%s\n' "$USUARIO ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USUARIO
 chmod 440 /etc/sudoers.d/$USUARIO
 chmod +x /home/$USUARIO/.config/bspwm/bspwmrc
 chmod +x /home/$USUARIO/.config/polybar/ -R
+chmod +x /usr/local/bin/caido
