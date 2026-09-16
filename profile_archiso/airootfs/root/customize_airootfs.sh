@@ -21,7 +21,6 @@ chmod 440 /etc/sudoers.d/$USUARIO
 chmod +x /home/$USUARIO/.config/bspwm/bspwmrc
 chmod +x /home/$USUARIO/.config/polybar/ -R
 chmod +x /usr/local/bin/caido
-chmod +x /usr/local/bin/autoconfig-hardware.sh
 pacman-key --init
 pacman-key --populate archlinux
 pacman -Sy
