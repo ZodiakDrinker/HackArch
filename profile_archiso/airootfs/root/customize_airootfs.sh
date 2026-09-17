@@ -24,4 +24,4 @@ chmod +x /usr/local/bin/caido
 pacman-key --init
 pacman-key --populate archlinux
 pacman -Sy
-pacman -su
+pacman -Su
