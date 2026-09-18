@@ -1,2 +1,2 @@
 [core]
-    sshCommand = ssh -i ~/mnt/github -o IdentitiesOnly=yes
+    sshCommand = ssh -i ~/mnt/hackarck/creds/github -o IdentitiesOnly=yes
